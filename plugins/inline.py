@@ -53,23 +53,23 @@ async def answer(bot, query):
                                                   max_results=10,
                                                   offset=offset)
 
-    for file in files: 
-        title=file.file_caption
+    for file in files:
+        title=file.file_name
         size=get_size(file.file_size)
-        f_name=file.name
+        f_caption=file.caption
         if CUSTOM_FILE_CAPTION:
             try:
-                f_caption=CUSTOM_FILE_CAPTION.format(file_caption= '' if title is None else title, file_size='' if size is None else size, file_name='' if f_name is None else f_name)
+                f_caption=CUSTOM_FILE_CAPTION.format(file_name= '' if title is None else title, file_size='' if size is None else size, file_caption='' if f_caption is None else f_caption)
             except Exception as e:
                 logger.exception(e)
-                f_name=f_name
-        if f_name is None:
-            f_name = f"{file.file_caption}"
+                f_caption=f_caption
+        if f_caption is None:
+            f_caption = f"{file.file_name}"
         results.append(
             InlineQueryResultCachedDocument(
-                title=file.file_caption,
+                title=file.file_name,
                 file_id=file.file_id,
-                name=f_name,
+                caption=f_caption,
                 description=f'Size: {get_size(file.file_size)}\nType: {file.file_type}',
                 reply_markup=reply_markup))
 
@@ -107,6 +107,7 @@ def get_reply_markup(query):
         ]
         ]
     return InlineKeyboardMarkup(buttons)
+
 
 
 
